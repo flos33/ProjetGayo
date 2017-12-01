@@ -115,7 +115,7 @@ public class LuceneIndexation {
 		}
 	}
 
-	public static EnglishAnalyzer getAnalyzer() {
+	public static FrenchAnalyzer getAnalyzer() {
 		return analyzer;
 	}
 	

@@ -61,7 +61,7 @@ public class LuceneSearch {
 	          break;
 	        }
 	        collector = TopScoreDocCollector.create(5);
-	        EnglishAnalyzer analyzer = LuceneIndexation.getAnalyzer();
+	        FrenchAnalyzer analyzer = LuceneIndexation.getAnalyzer();
 	        Query q = new QueryParser("contents", analyzer).parse(s);
 	        searcher.search(q, collector);
 	        ScoreDoc[] hits = collector.topDocs().scoreDocs;
