@@ -1,3 +1,4 @@
+package recherchetextuelle;
 import java.io.IOException;
 import java.io.StringReader;
 

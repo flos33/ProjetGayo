@@ -1,3 +1,4 @@
+package recherchetextuelle;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;

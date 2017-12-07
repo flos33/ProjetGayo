@@ -1,3 +1,4 @@
+package recherchetextuelle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,8 +31,8 @@ public class LuceneIndexation {
 	    // potentially overwriting any existing files there.
 	    FSDirectory dir = FSDirectory.open(new File(indexDir).toPath());
 
-
-	    IndexWriterConfig config = new IndexWriterConfig(getAnalyzer());
+	    
+	       IndexWriterConfig config = new IndexWriterConfig(getAnalyzer());
 
 	    writer = new IndexWriter(dir, config);
 	  }

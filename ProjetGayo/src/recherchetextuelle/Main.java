@@ -1,3 +1,4 @@
+package recherchetextuelle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -37,12 +38,14 @@ public class Main {
 	      System.exit(-1);
 	    }
 
-
+		    
 	    //===================================================
 	    //after adding, we always have to call the
 	    //closeIndex, otherwise the index is not created    
 	    //===================================================
 	    indexer.closeIndex();
+	    
+	    indexer.indexFileOrDirectory("C://Users//ccecqa//desktop//Corpus");
 	  //=========================================================
 	    // Now search
 	    //=========================================================
