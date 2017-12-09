@@ -1,16 +1,19 @@
-package recherchetextuelle;
+package recherchetextuelle.util;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.synonym.SynonymGraphFilter;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -18,25 +21,33 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
+public class Indexer {
 
-public class LuceneIndexation {
-
-	private static FrenchAnalyzer analyzer = new FrenchAnalyzer(getStopWords());
-	private IndexWriter writer;
-	private ArrayList<File> queue = new ArrayList<File>();
+	// private static EnglishAnalyzer analyzer = new
+	// EnglishAnalyzer(Version.LUCENE_40, EnglishAnalyzer.getDefaultStopSet());
+	private static CustomAnalyzer analyzer = new CustomAnalyzer();
+	private static IndexWriter writer;  // retirer le static pour que chaque objet index ai son writer specific
+	private  ArrayList<File> queue = new ArrayList<File>();
 	
-	public LuceneIndexation(String indexDir) throws IOException {
-	    // the boolean true parameter means to create a new index everytime, 
-	    // potentially overwriting any existing files there.
-	    FSDirectory dir = FSDirectory.open(new File(indexDir).toPath());
 
-	    
-	       IndexWriterConfig config = new IndexWriterConfig(getAnalyzer());
+	public Indexer(String indexDir) throws IOException {
+		
+		FSDirectory dir = FSDirectory.open(Paths.get(indexDir));
+		IndexWriterConfig config = new IndexWriterConfig(analyzer);
+		writer = new IndexWriter(dir, config);
+	}
 
-	    writer = new IndexWriter(dir, config);
-	  }
 	
+	public static void indexDocument(Document doc) throws IOException {
+		writer.addDocument(doc);		
+	}
+
+	
+	public void closeIndex() throws IOException {
+		writer.close();
+	}
 	
 	private void addFiles(File file) {
 
@@ -55,36 +66,30 @@ public class LuceneIndexation {
 	      if (filename.endsWith(".htm") || filename.endsWith(".html") || 
 	              filename.endsWith(".xml") || filename.endsWith(".txt")) {
 	        queue.add(file);
+	        System.out.println("added to queue: " + file.toString());
 	      } else {
-	        System.out.println("Ignoré " + filename);
+	        System.out.println("Ignorï¿½ " + filename);
 	      }
 	    }
 	  }
-	
+
 	public void indexFileOrDirectory(String fileName) throws IOException {
 	    //===================================================
 	    //gets the list of files in a folder (if user has submitted
 	    //the name of a folder) or gets a single file name (is user
 	    //has submitted only the file name) 
 	    //===================================================
-	    addFiles(new File(fileName));
+		
+	    this.addFiles(new File(fileName));
 	    
-	    int originalNumDocs = writer.numDocs();
 	    for (File f : queue) {
 	      FileReader fr = null;
 	      try {
-	        Document doc = new Document();
-
-	        //===================================================
-	        // add contents of file
-	        //===================================================
-	        fr = new FileReader(f);
-	        doc.add(new TextField("contents", fr));
-	        doc.add(new StringField("path", f.getPath(), Field.Store.YES));
-	        doc.add(new StringField("filename", f.getName(), Field.Store.YES));
-
+		    fr = new FileReader(f);
+	    	  	Document doc = fileToDoc(fr, f.getPath(), f.getName());
 	        writer.addDocument(doc);
-	        System.out.println("Ajouté: " + f);
+	        
+	        System.out.println("Ajoutï¿½: " + f);
 	      } catch (Exception e) {
 	        System.out.println("Impossible d'ajouter: " + f);
 	      } finally {
@@ -92,33 +97,8 @@ public class LuceneIndexation {
 	      }
 	    }
 	    
-	    int newNumDocs = writer.numDocs();
-	    System.out.println("");
-	    System.out.println("************************");
-	    System.out.println((newNumDocs - originalNumDocs) + " documents ajoutés.");
-	    System.out.println("************************");
-
 	    queue.clear();
 	  }
-
-	public void closeIndex() throws IOException {
-	    writer.close();
-	  }
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-	public void addDocumentToWriter(Document doc){
-		try {
-			writer.addDocument(doc);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static FrenchAnalyzer getAnalyzer() {
-		return analyzer;
-	}
 	
 	public static CharArraySet getStopWords(){
 		System.out.println("Enter the path to the stop word file");
@@ -142,5 +122,17 @@ public class LuceneIndexation {
 		}
 		return new CharArraySet(wordList, true);
 	}
-}
+	
+	private Document fileToDoc(FileReader fr,String filePath, String fileName)  {
+		Document doc = new Document();
 
+        //===================================================
+        // add contents of file
+        //===================================================
+        doc.add(new TextField("contents", fr));
+        doc.add(new StringField("path", filePath, Field.Store.YES));
+        doc.add(new StringField("filename", fileName, Field.Store.YES));
+		return doc;
+	}
+	
+}
