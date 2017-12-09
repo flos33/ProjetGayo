@@ -58,10 +58,11 @@ public class Gestion  {
 			terms.add("sus");
 			terms.add("dec");
 			searcher.phraseQuery(terms);*/
-			
+			//TODO Gerer un chargement des char arrayset de phrase à autophraser depuis file ou user input
 			searcher.query(
 					"sus_dec "
 					);
+			
 			
 			
 		} catch (IOException e) {

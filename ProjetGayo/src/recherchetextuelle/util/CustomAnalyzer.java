@@ -7,6 +7,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.WordlistLoader;
 import org.apache.lucene.analysis.core.UnicodeWhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  /** File containing default French stopwords. */
 	  public final static String DEFAULT_STOPWORD_FILE = "french_stop.txt";
 	  FileReader synonymFileReader;
-	  SolrSynonymParser synonymParser = new SolrSynonymParser(true, true, new StandardAnalyzer());
+	  SolrSynonymParser synonymParser = new SolrSynonymParser(true, true, new SynonymsAnalyzer());
 	  
 	  /** Default set of articles for ElisionFilter */
 	  public static final CharArraySet DEFAULT_ARTICLES = CharArraySet.unmodifiableSet(
@@ -53,7 +54,8 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  /**
 	   * Contains words that should be indexed but not stemmed.
 	   */
-	  private final CharArraySet excltable;
+	  private CharArraySet excltable = new CharArraySet(Arrays.asList(
+	          "ST+","ST>","st+","st>"), true);
 
 	  /**
 	   * Returns an unmodifiable instance of the default stop-words set.
@@ -137,6 +139,9 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	    result = new LowerCaseFilter(result);
 	    result = new StopFilter(result, stopwords);
 	    result = new StopFilter(result, defaultStopWords);
+	    if(!excltable.isEmpty())
+	        result = new SetKeywordMarkerFilter(result, excltable);
+	    
 	    CharArraySet phrases = new CharArraySet(Arrays.asList(
 	            "sus dec", "sus decalage", "sus ST"
 	            ), false);
