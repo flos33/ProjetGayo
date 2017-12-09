@@ -24,13 +24,17 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.spans.SpanNearQuery;
+import org.apache.lucene.search.spans.SpanNotQuery;
+import org.apache.lucene.search.spans.SpanQuery;
+import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 
 public class Searcher {
 	static IndexReader reader;
 	static IndexSearcher searcher;
-	static TopScoreDocCollector collector = TopScoreDocCollector.create(5);
+	TopScoreDocCollector collector = TopScoreDocCollector.create(5);
 	static FileReader synonymFileReader;
 	CustomAnalyzer analyzer;
 	
@@ -57,6 +61,31 @@ public class Searcher {
           System.out.println((i + 1) + ". " + d.get("path") + " score=" + hits[i].score);
         }
 	}
+	public void findSusDec() throws ParseException, IOException {
+		
+        int distance = 3;
+        boolean ordered = true;
+        SpanQuery susdec = new SpanTermQuery(new Term("contents", "sus_dec"));
+        SpanQuery negation = new SpanTermQuery(new Term("contents", "pas"));
+        SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { susdec, negation },
+        distance, ordered);
+
+        Query q = new SpanNotQuery(susdec, negationSusdec);
+        
+        System.out.println(q);
+        searcher.search(q, collector);
+        ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+        // 4. display results
+        System.out.println("Trouv� " + hits.length + " hits.");
+        for(int i=0;i<hits.length;++i) {
+          int docId = hits[i].doc;
+          Document d = searcher.doc(docId);
+          System.out.println((i + 1) + ". " + d.get("path") + " score=" + hits[i].score);
+        }
+        
+	}
+	
 	public void phraseQuery(ArrayList<String> termsList) throws IOException {
 		PhraseQuery.Builder builder = new PhraseQuery.Builder();
 		
@@ -76,7 +105,7 @@ public class Searcher {
 		
 	
 	
-	public static void fuzzyQuery(String nom, String prenom, String sexe, String ddn) throws IOException {
+	public void fuzzyQuery(String nom, String prenom, String sexe, String ddn) throws IOException {
 		Builder booleanQuery = new BooleanQuery.Builder();
 		
 		FuzzyQuery query1 = new FuzzyQuery(new Term("nom", nom));
@@ -89,8 +118,8 @@ public class Searcher {
 		booleanQuery.add(query3, Occur.MUST);
 		booleanQuery.add(query4, Occur.MUST);
 		
-		searcher.search(booleanQuery.build(),collector);
- 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
+		searcher.search(booleanQuery.build(),this.collector);
+ 		ScoreDoc[] hits = this.collector.topDocs().scoreDocs;
 		for(int i=0;i<hits.length;++i) {
 	          int docId = hits[i].doc;
 	          Document d = searcher.doc(docId);

@@ -7,7 +7,6 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.WordlistLoader;
 import org.apache.lucene.analysis.core.UnicodeWhitespaceAnalyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  /** File containing default French stopwords. */
 	  public final static String DEFAULT_STOPWORD_FILE = "french_stop.txt";
 	  FileReader synonymFileReader;
-	  SolrSynonymParser synonymParser = new SolrSynonymParser(true, true, new SynonymsAnalyzer());
+	  SolrSynonymParser synonymParser = new SolrSynonymParser(true, true, new StandardAnalyzer());
 	  
 	  /** Default set of articles for ElisionFilter */
 	  public static final CharArraySet DEFAULT_ARTICLES = CharArraySet.unmodifiableSet(
@@ -49,13 +48,12 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 
 	  public static final CharArraySet defaultStopWords = CharArraySet.unmodifiableSet(
 		      new CharArraySet(Arrays.asList(
-			          ":"), true));
+			          ":","d"), true));
 	  
 	  /**
 	   * Contains words that should be indexed but not stemmed.
 	   */
-	  private CharArraySet excltable = new CharArraySet(Arrays.asList(
-	          "ST+","ST>","st+","st>"), true);
+	  private final CharArraySet excltable;
 
 	  /**
 	   * Returns an unmodifiable instance of the default stop-words set.
@@ -139,14 +137,13 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	    result = new LowerCaseFilter(result);
 	    result = new StopFilter(result, stopwords);
 	    result = new StopFilter(result, defaultStopWords);
-	    if(!excltable.isEmpty())
-	        result = new SetKeywordMarkerFilter(result, excltable);
-	    
-	    CharArraySet phrases = new CharArraySet(Arrays.asList(
+	    @SuppressWarnings("deprecation")
+		CharArraySet phrases = new org.apache.lucene.analysis.util.CharArraySet(Arrays.asList(
 	            "sus dec", "sus decalage", "sus ST"
 	            ), false);
+		result = new AutoPhrasingTokenFilter(result, phrases, false);
+
 	    
-	    if(synonymFileReader != null) {
 		    try {
 		    		SynonymMap map = synonymParser.build();
 				result = new SynonymGraphFilter(result, map, false);
@@ -157,9 +154,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 				System.out.println("couldn't build synonym map from synonym file");
 				e.printStackTrace();
 			}
-	    }else {
-	    		
-	    		result = new AutoPhrasingTokenFilter(result, (org.apache.lucene.analysis.util.CharArraySet) phrases, false);}
+	    
 	    
 	    return new TokenStreamComponents(source, result);
 	  }

@@ -25,6 +25,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.spans.SpanNotQuery;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -44,12 +45,12 @@ public class Gestion  {
 		
 		 
 		try {
-			/*indexer = new Indexer(indexDir);
+			/*indexer = new Indexer(indexDir,synonymsFile);
 			
 			indexer.indexFileOrDirectory(corpusDir);
 			
-			indexer.closeIndex();
-			*/
+			indexer.closeIndex();*/
+			
 			
 			
 			searcher = new Searcher(indexDir, synonymsFile);
@@ -59,9 +60,12 @@ public class Gestion  {
 			terms.add("dec");
 			searcher.phraseQuery(terms);*/
 			//TODO Gerer un chargement des char arrayset de phrase à autophraser depuis file ou user input
+			/*System.out.println("tous les doc contenant sus dec:");
 			searcher.query(
-					"sus_dec "
-					);
+					" sus_decalage"
+					);*/
+			System.out.println("Les doc contenant sus dec pas proche d'une negation:");
+			searcher.findSusDec();
 			
 			
 			
