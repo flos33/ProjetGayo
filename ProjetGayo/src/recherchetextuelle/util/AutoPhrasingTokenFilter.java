@@ -51,7 +51,7 @@ public class AutoPhrasingTokenFilter extends TokenFilter {
   private char[] lastEmitted = null;
   private char[] lastValid = null;
 
-  private Character replaceWhitespaceWith = null;
+  private Character replaceWhitespaceWith = '_';
   
   private int positionIncr = 0;
 	

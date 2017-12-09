@@ -137,6 +137,10 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	    result = new LowerCaseFilter(result);
 	    result = new StopFilter(result, stopwords);
 	    result = new StopFilter(result, defaultStopWords);
+	    CharArraySet phrases = new CharArraySet(Arrays.asList(
+	            "sus dec", "sus decalage", "sus ST"
+	            ), false);
+	    
 	    if(synonymFileReader != null) {
 		    try {
 		    		SynonymMap map = synonymParser.build();
@@ -148,7 +152,10 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 				System.out.println("couldn't build synonym map from synonym file");
 				e.printStackTrace();
 			}
-	    }
+	    }else {
+	    		
+	    		result = new AutoPhrasingTokenFilter(result, (org.apache.lucene.analysis.util.CharArraySet) phrases, false);}
+	    
 	    return new TokenStreamComponents(source, result);
 	  }
 	

@@ -60,7 +60,7 @@ public class Gestion  {
 			searcher.phraseQuery(terms);*/
 			
 			searcher.query(
-					"sus dec doul tho"
+					"sus_dec "
 					);
 			
 			
