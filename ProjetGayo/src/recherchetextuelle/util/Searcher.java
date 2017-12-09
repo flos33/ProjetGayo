@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.document.Document;
@@ -27,6 +28,10 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
+
 public class Searcher {
 	static IndexReader reader;
 	static IndexSearcher searcher;
@@ -41,21 +46,29 @@ public class Searcher {
 	    searcher = new IndexSearcher(reader);
 	}
 	
-	public void query(String queryString) throws ParseException, IOException {
+	public ObservableList<recherchetextuelle.model.Document> query(String queryString) throws ParseException, IOException {
 		collector = TopScoreDocCollector.create(5);
         Query q = new ComplexPhraseQueryParser("contents", analyzer).parse(queryString);
         
         System.out.println(q);
         searcher.search(q, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
+        ObservableList<recherchetextuelle.model.Document> docList = FXCollections.observableArrayList();
 
         // 4. display results
         System.out.println("Trouv� " + hits.length + " hits.");
         for(int i=0;i<hits.length;++i) {
           int docId = hits[i].doc;
           Document d = searcher.doc(docId);
+          String path = d.get("path");
+          float score = hits[i].score;	          		  
+          
+          docList.addAll(new recherchetextuelle.model.Document(path, score));
+
+          
           System.out.println((i + 1) + ". " + d.get("path") + " score=" + hits[i].score);
         }
+        return docList;
 	}
 	public void phraseQuery(ArrayList<String> termsList) throws IOException {
 		PhraseQuery.Builder builder = new PhraseQuery.Builder();
