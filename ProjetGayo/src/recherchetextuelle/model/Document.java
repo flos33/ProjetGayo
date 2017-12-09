@@ -37,16 +37,15 @@ public class Document {
 	        return path;
 	    }
 
+	    public FloatProperty scoreProperty() {
+	        return score;
+	    }
 	    public Float getScore() {
-	        return score.get();
+	        return scoreProperty().get();
 	    }
 
 	    public void setScore(Float score) {
-	        this.score.set(score);
-	    }
-
-	    public FloatProperty scoreProperty() {
-	        return score;
+	        this.scoreProperty().set(score);
 	    }
 
 	  

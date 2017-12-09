@@ -21,6 +21,9 @@
                                   <TableColumn fx:id="pathColumn" prefWidth="121.0" text="Chemin" />
                                   <TableColumn fx:id="scoreColumn" prefWidth="101.0" text="Score" />
                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                               </TableView>
                            </children></AnchorPane>
                     </items>

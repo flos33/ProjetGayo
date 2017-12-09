@@ -60,16 +60,20 @@ public class Searcher {
         for(int i=0;i<hits.length;++i) {
           int docId = hits[i].doc;
           Document d = searcher.doc(docId);
-          String path = d.get("path");
-          float score = hits[i].score;	          		  
+          String pathi = d.get("path");
+          Float scorei = hits[i].score;	          		  
           
-          docList.addAll(new recherchetextuelle.model.Document(path, score));
+          docList.add(new recherchetextuelle.model.Document(pathi, scorei));
 
           
-          System.out.println((i + 1) + ". " + d.get("path") + " score=" + hits[i].score);
+          System.out.println((i + 1) + ". " + pathi + " score=" + scorei);
+              System.out.println(docList.get(i));
+          
         }
         return docList;
+
 	}
+	
 	public void phraseQuery(ArrayList<String> termsList) throws IOException {
 		PhraseQuery.Builder builder = new PhraseQuery.Builder();
 		

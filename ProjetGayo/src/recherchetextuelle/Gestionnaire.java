@@ -83,6 +83,53 @@ public class Gestionnaire extends Application {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
+    
+    public static Indexer getIndexer() {
+		return indexer;
+	}
+
+	public static void setIndexer(Indexer indexer) {
+		Gestionnaire.indexer = indexer;
+	}
+
+	public static Searcher getSearcher() {
+		return searcher;
+	}
+
+
+	public static void setSearcher(Searcher searcher) {
+		Gestionnaire.searcher = searcher;
+	}
+
+
+	public static String getIndexDir() {
+		return indexDir;
+	}
+
+	public static void setIndexDir(String indexDir) {
+		Gestionnaire.indexDir = indexDir;
+	}
+
+
+	public static String getCorpusDir() {
+		return corpusDir;
+	}
+
+
+	public static void setCorpusDir(String corpusDir) {
+		Gestionnaire.corpusDir = corpusDir;
+	}
+
+	public static String getSynonymsFile() {
+		return synonymsFile;
+	}
+
+
+	public static void setSynonymsFile(String synonymsFile) {
+		Gestionnaire.synonymsFile = synonymsFile;
+	}
+    
+    
 
 	public static void main(String[] args) throws ParseException {
 		
@@ -120,79 +167,6 @@ public class Gestionnaire extends Application {
 		
 		
 	}
-	
-	
-	
-
-	public static Indexer getIndexer() {
-		return indexer;
-	}
-
-
-
-
-	public static void setIndexer(Indexer indexer) {
-		Gestionnaire.indexer = indexer;
-	}
-
-
-
-
-	public static Searcher getSearcher() {
-		return searcher;
-	}
-
-
-
-
-	public static void setSearcher(Searcher searcher) {
-		Gestionnaire.searcher = searcher;
-	}
-
-
-
-
-	public static String getIndexDir() {
-		return indexDir;
-	}
-
-
-
-
-	public static void setIndexDir(String indexDir) {
-		Gestionnaire.indexDir = indexDir;
-	}
-
-
-
-
-	public static String getCorpusDir() {
-		return corpusDir;
-	}
-
-
-
-
-	public static void setCorpusDir(String corpusDir) {
-		Gestionnaire.corpusDir = corpusDir;
-	}
-
-
-
-
-	public static String getSynonymsFile() {
-		return synonymsFile;
-	}
-
-
-
-
-	public static void setSynonymsFile(String synonymsFile) {
-		Gestionnaire.synonymsFile = synonymsFile;
-	}
-    
-    
-    
-    
+	 
     
 }

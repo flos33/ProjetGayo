@@ -1,5 +1,7 @@
 package recherchetextuelle.view;
 
+import javafx.beans.property.ReadOnlyFloatProperty;
+import javafx.beans.property.ReadOnlyFloatWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -39,8 +41,8 @@ public class RechercheDocController {
     private void initialize() {
         // Initialize the person table with the two columns.
         pathColumn.setCellValueFactory(cellData -> cellData.getValue().pathProperty());
-       /* scoreColumn.setCellValueFactory(cellData -> cellData.getValue().scoreProperty());*/
-    }
+        scoreColumn.setCellValueFactory(cellData -> cellData.getValue().scoreProperty());
+            }
 
     /**
      * Is called by the main application to give a reference back to itself.
