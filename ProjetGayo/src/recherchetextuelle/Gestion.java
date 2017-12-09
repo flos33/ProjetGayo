@@ -36,9 +36,9 @@ import recherchetextuelle.util.Searcher;
 public class Gestion  {
 	static Indexer indexer = null;
 	static Searcher searcher = null;
-	static String indexDir ="/Users/pierreo/Projects/M2SITIS/gayo/index";
-	static String corpusDir ="/Users/pierreo/Projects/M2SITIS/gayo/corpus";
-	static String synonymsFile = "/Users/pierreo/Projects/M2SITIS/gayo/synonyms.txt";
+	static String indexDir ="/Users/ccecqa/Desktop/Gayo/index";
+	static String corpusDir ="/Users/ccecqa/Desktop/Gayo/corpus";
+	static String synonymsFile = "/Users/ccecqa/Downloads/synonyms.txt";
 	
 	public static void main(String[] args) throws ParseException {
 		
