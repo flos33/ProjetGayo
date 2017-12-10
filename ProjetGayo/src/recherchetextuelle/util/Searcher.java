@@ -84,6 +84,7 @@ public class Searcher {
 		
 		//-----Obtain susDecsAndAcr docIDs-----
 		ArrayList<Integer> susDecAndAcrDocIds = new ArrayList<>();
+		ArrayList<Float> susDecAndAcrScores = new ArrayList<>();
         
         searcher.search(susDecAndAcrBQ.build(), collector);
         ScoreDoc[] susDecAndAcrHits = collector.topDocs().scoreDocs;
@@ -91,6 +92,7 @@ public class Searcher {
         for(int i=0;i<susDecAndAcrHits.length;++i) {
           int docId = susDecAndAcrHits[i].doc;
           susDecAndAcrDocIds.add(docId);
+          susDecAndAcrScores.add((float) susDecAndAcrHits[i].score);
         }
         //-----obtained susDecsAndAcr docIDs-----
         
@@ -104,6 +106,8 @@ public class Searcher {
         
         //-----Obtain susDecsNoAcr docIDs-----
   		ArrayList<Integer> susDecNoAcrDocIds = new ArrayList<>();
+  		ArrayList<Float> susDecNoAcrScores = new ArrayList<>();
+
   		collector = TopScoreDocCollector.create(5);
           searcher.search(susDecNoAcrBQ.build(), collector);
           ScoreDoc[] susDecNoAcrHits = collector.topDocs().scoreDocs;
@@ -111,6 +115,8 @@ public class Searcher {
           for(int i=0;i<susDecNoAcrHits.length;++i) {
             int docId = susDecNoAcrHits[i].doc;
             susDecNoAcrDocIds.add(docId);
+            susDecNoAcrScores.add((float) susDecNoAcrHits[i].score);
+
           }
         //-----obtained susDecsNoAcr docIDs-----
           
@@ -119,7 +125,7 @@ public class Searcher {
           for(int i=0;i<susDecNoAcrDocIds.size();++i) {
 	          int docId = susDecNoAcrDocIds.get(i);
 	          Document d = searcher.doc(docId);
-	          System.out.println((i + 1) + ". " + d.get("path"));
+	          System.out.println((i + 1) + ". " + d.get("path") + "\tscore= "+ susDecNoAcrScores.get(i) );
 	          }
         //-----displayed susDecNoAcr -----
         //-----Display susDecAndAcr -----
@@ -127,7 +133,7 @@ public class Searcher {
           for(int i=0;i<susDecAndAcrDocIds.size();++i) {
 	          int docId = susDecAndAcrDocIds.get(i);
 	          Document d = searcher.doc(docId);
-	          System.out.println((i + 1) + ". " + d.get("path"));
+	          System.out.println((i + 1) + ". " + d.get("path") + "\tscore= "+ susDecAndAcrScores.get(i));
 	          }
         //-----displayed susDecAndAcr -----
 	}
