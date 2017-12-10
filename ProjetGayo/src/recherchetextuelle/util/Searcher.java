@@ -34,7 +34,7 @@ import org.apache.lucene.store.RAMDirectory;
 public class Searcher {
 	static IndexReader reader;
 	static IndexSearcher searcher;
-	TopScoreDocCollector collector = TopScoreDocCollector.create(5);
+	static TopScoreDocCollector collector = TopScoreDocCollector.create(5);
 	static FileReader synonymFileReader;
 	CustomAnalyzer analyzer;
 	
@@ -62,28 +62,74 @@ public class Searcher {
         }
 	}
 	public void findSusDec() throws ParseException, IOException {
-		
-        int distance = 3;
+		//-----Create all susDecs query-----
+        int distance = 2;
         boolean ordered = true;
         SpanQuery susdec = new SpanTermQuery(new Term("contents", "sus_dec"));
         SpanQuery negation = new SpanTermQuery(new Term("contents", "pas"));
         SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { susdec, negation },
         distance, ordered);
-
-        Query q = new SpanNotQuery(susdec, negationSusdec);
+        Query susDecTot = new SpanNotQuery(susdec, negationSusdec);
+        //-----created all susDecs query-----
         
-        System.out.println(q);
-        searcher.search(q, collector);
-        ScoreDoc[] hits = collector.topDocs().scoreDocs;
+        
+		//-----Create susDecs and acr query-----
 
-        // 4. display results
-        System.out.println("Trouv� " + hits.length + " hits.");
-        for(int i=0;i<hits.length;++i) {
-          int docId = hits[i].doc;
-          Document d = searcher.doc(docId);
-          System.out.println((i + 1) + ". " + d.get("path") + " score=" + hits[i].score);
+        Builder susDecAndAcrBQ = new BooleanQuery.Builder();
+        susDecAndAcrBQ.add(susDecTot, Occur.MUST);
+		TermQuery acr = new TermQuery(new Term("contents","acr"));
+		susDecAndAcrBQ.add(acr, Occur.MUST);
+        
+		//-----created susDecs and acr query-----
+		
+		//-----Obtain susDecsAndAcr docIDs-----
+		ArrayList<Integer> susDecAndAcrDocIds = new ArrayList<>();
+        
+        searcher.search(susDecAndAcrBQ.build(), collector);
+        ScoreDoc[] susDecAndAcrHits = collector.topDocs().scoreDocs;
+
+        for(int i=0;i<susDecAndAcrHits.length;++i) {
+          int docId = susDecAndAcrHits[i].doc;
+          susDecAndAcrDocIds.add(docId);
         }
+        //-----obtained susDecsAndAcr docIDs-----
         
+      //-----Create susDecsNoAcr query-----
+
+        Builder susDecNoAcrBQ = new BooleanQuery.Builder();
+        susDecNoAcrBQ.add(susDecTot, Occur.MUST);
+		susDecNoAcrBQ.add(acr, Occur.MUST_NOT);
+        
+		//-----created susDecsNoAcr query-----
+        
+        //-----Obtain susDecsNoAcr docIDs-----
+  		ArrayList<Integer> susDecNoAcrDocIds = new ArrayList<>();
+  		collector = TopScoreDocCollector.create(5);
+          searcher.search(susDecNoAcrBQ.build(), collector);
+          ScoreDoc[] susDecNoAcrHits = collector.topDocs().scoreDocs;
+
+          for(int i=0;i<susDecNoAcrHits.length;++i) {
+            int docId = susDecNoAcrHits[i].doc;
+            susDecNoAcrDocIds.add(docId);
+          }
+        //-----obtained susDecsNoAcr docIDs-----
+          
+        //-----Display susDecNoAcr -----
+          System.out.println("Textes avec susDecs et pas de ACR:");
+          for(int i=0;i<susDecNoAcrDocIds.size();++i) {
+	          int docId = susDecNoAcrDocIds.get(i);
+	          Document d = searcher.doc(docId);
+	          System.out.println((i + 1) + ". " + d.get("path"));
+	          }
+        //-----displayed susDecNoAcr -----
+        //-----Display susDecAndAcr -----
+          System.out.println("Textes avec susDecs et ACR:");
+          for(int i=0;i<susDecAndAcrDocIds.size();++i) {
+	          int docId = susDecAndAcrDocIds.get(i);
+	          Document d = searcher.doc(docId);
+	          System.out.println((i + 1) + ". " + d.get("path"));
+	          }
+        //-----displayed susDecAndAcr -----
 	}
 	
 	public void phraseQuery(ArrayList<String> termsList) throws IOException {

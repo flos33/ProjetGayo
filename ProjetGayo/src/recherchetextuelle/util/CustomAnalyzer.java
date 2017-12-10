@@ -139,7 +139,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	    result = new StopFilter(result, defaultStopWords);
 	    @SuppressWarnings("deprecation")
 		CharArraySet phrases = new org.apache.lucene.analysis.util.CharArraySet(Arrays.asList(
-	            "sus dec", "sus decalage", "sus ST"
+	            "sus dec", "sus decalage", "sus ST", "no flow","arret cardio respiratoire"
 	            ), false);
 		result = new AutoPhrasingTokenFilter(result, phrases, false);
 

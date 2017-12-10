@@ -60,11 +60,7 @@ public class Gestion  {
 			terms.add("dec");
 			searcher.phraseQuery(terms);*/
 			//TODO Gerer un chargement des char arrayset de phrase à autophraser depuis file ou user input
-			/*System.out.println("tous les doc contenant sus dec:");
-			searcher.query(
-					" sus_decalage"
-					);*/
-			System.out.println("Les doc contenant sus dec pas proche d'une negation:");
+			
 			searcher.findSusDec();
 			
 			
