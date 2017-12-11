@@ -3,9 +3,11 @@ package recherchetextuelle.util;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -31,12 +33,14 @@ import org.apache.lucene.store.RAMDirectory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
+import javafx.collections.ObservableMap;
 
 public class Searcher {
 	static IndexReader reader;
 	static IndexSearcher searcher;
 	static TopScoreDocCollector collector = TopScoreDocCollector.create(5);
 	static FileReader synonymFileReader;
+	public ArrayList<String> docList ;
 	CustomAnalyzer analyzer;
 	
 	public Searcher(String indexDir, String synonymFilePath) throws IOException, java.text.ParseException {
@@ -46,33 +50,40 @@ public class Searcher {
 	    searcher = new IndexSearcher(reader);
 	}
 	
-	public ObservableList<recherchetextuelle.model.Document> query(String queryString) throws ParseException, IOException {
+	public ArrayList<String> query(String queryString) throws ParseException, IOException {
 		collector = TopScoreDocCollector.create(5);
         Query q = new ComplexPhraseQueryParser("contents", analyzer).parse(queryString);
         
         System.out.println(q);
         searcher.search(q, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
-        ObservableList<recherchetextuelle.model.Document> docList = FXCollections.observableArrayList();
+        ArrayList<String> docList = new ArrayList<>();
 
         // 4. display results
-        System.out.println("Trouvï¿½ " + hits.length + " hits.");
+        System.out.println("Trouvé " + hits.length + " hits.");
         for(int i=0;i<hits.length;++i) {
           int docId = hits[i].doc;
           Document d = searcher.doc(docId);
-          String pathi = d.get("path");
+         /* String pathi = d.get("filename");
           Float scorei = hits[i].score;	          		  
           
-          docList.add(new recherchetextuelle.model.Document(pathi, scorei));
+         docList.add((i+1)+";"+ pathi +";"+ scorei);*/
+         
+          docList.add((d.get("filename")));
 
           
-          System.out.println((i + 1) + ". " + pathi + " score=" + scorei);
+         /* System.out.println((i + 1) + ". " + pathi + " score=" + scorei);*/
               System.out.println(docList.get(i));
           
         }
-        return docList;
+        System.out.println(docList);
+ 
+       
 
 	}
+	
+	 public ArrayList<String> getItems () {
+	     return docList;}
 	
 	public void phraseQuery(ArrayList<String> termsList) throws IOException {
 		PhraseQuery.Builder builder = new PhraseQuery.Builder();
@@ -91,7 +102,7 @@ public class Searcher {
 	          }
 		}
 		
-	
+	/*
 	
 	public static void fuzzyQuery(String nom, String prenom, String sexe, String ddn) throws IOException {
 		Builder booleanQuery = new BooleanQuery.Builder();
@@ -114,5 +125,5 @@ public class Searcher {
 	          System.out.println((i + 1) + ". " + d.get("nom") + d.get("prenom") + d.get("sexe") + d.get("ddn") + " score=" + hits[i].score);
 	        }
 	}
-	
+	*/
 }

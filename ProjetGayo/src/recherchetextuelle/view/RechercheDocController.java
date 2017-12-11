@@ -14,15 +14,21 @@ public class RechercheDocController {
 	@FXML
     private TableView<Document> docTable;
     @FXML
-    private TableColumn<Document, String> pathColumn;
+    private TableColumn<Document, String> iColumn;
     @FXML
-    private TableColumn<Document, Float> scoreColumn;
+    private TableColumn<Document, String> pathColumn;
+   /* @FXML
+    private TableColumn<Document, Float> scoreColumn;*/
 
+    @FXML
+    private Label iLabel;
     @FXML
     private Label pathLabel;
+    /*
     @FXML
     private Label scoreLabel;
-
+*/
+    
     // Reference to the main application.
     private Gestionnaire gestionnaire;
 
@@ -39,9 +45,11 @@ public class RechercheDocController {
      */
     @FXML
     private void initialize() {
-        // Initialize the person table with the two columns.
+        // Initialize the docTable with the two columns.
+    	
+        iColumn.setCellValueFactory(cellData -> cellData.getValue().iProperty());
         pathColumn.setCellValueFactory(cellData -> cellData.getValue().pathProperty());
-        scoreColumn.setCellValueFactory(cellData -> cellData.getValue().scoreProperty());
+
             }
 
     /**
@@ -53,7 +61,7 @@ public class RechercheDocController {
         this.gestionnaire = gestionnaire;
 
         // Add observable list data to the table
-        docTable.setItems(gestionnaire.getDocList());
+        docTable.setItems(gestionnaire.getDocListe());
     }
 }
 

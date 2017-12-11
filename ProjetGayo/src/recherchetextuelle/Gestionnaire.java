@@ -1,7 +1,12 @@
+
 package recherchetextuelle;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.event.DocumentListener;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -11,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import recherchetextuelle.model.Document;
 import recherchetextuelle.util.Indexer;
 import recherchetextuelle.util.Searcher;
 import recherchetextuelle.view.RechercheDocController;
@@ -19,13 +25,15 @@ public class Gestionnaire extends Application {
 
     private Stage primaryStage;
     private BorderPane panneauUtilisateur;
-    private ObservableList<recherchetextuelle.model.Document> docList = FXCollections.observableArrayList();
+    private ObservableList<recherchetextuelle.model.Document> docListe = FXCollections.observableArrayList();
+       
     static Indexer indexer = null;
 	static Searcher searcher = null;
 	static String indexDir ="/Users/ccecqa/Desktop/Gayo/index";
 	static String corpusDir ="/Users/ccecqa/Desktop/Gayo/corpus";
 	static String synonymsFile = "/Users/ccecqa/Downloads/synonyms.txt";
 	
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -35,6 +43,30 @@ public class Gestionnaire extends Application {
 
         showRechercheDoc();
     }
+    
+    public Gestionnaire() {
+        // Add some sample data
+ 
+    /*
+    	Iterator<String> itr = docList.iterator();
+    	while(itr.hasNext())
+    	      system.out.println(itr.next());
+    	
+    	
+    	
+    	for(int i = 0 ; i < docList.size; i++)
+    	String pathi = docList.g	
+    	
+    	*/
+    	
+        docListe.add(new Document("Hans", "Muster"));
+        docListe.add(new Document("Ruth", "Mueller"));
+        
+    }
+    
+    
+   
+    
 
     /**
      * Initialise le panneau Utilisateur.
@@ -75,8 +107,8 @@ public class Gestionnaire extends Application {
         }
     }
     
-    public ObservableList<recherchetextuelle.model.Document> getDocList() {
-        return docList;
+    public ObservableList<recherchetextuelle.model.Document> getDocListe() {
+        return docListe;
     }
 
     
@@ -129,12 +161,12 @@ public class Gestionnaire extends Application {
 		Gestionnaire.synonymsFile = synonymsFile;
 	}
     
-    
+   
 
 	public static void main(String[] args) throws ParseException {
 		
 		
-		 
+	 
 		try {
 			/*indexer = new Indexer(indexDir);
 			
@@ -163,7 +195,9 @@ public class Gestionnaire extends Application {
 			e.printStackTrace();
 		}
 		
+
 		launch(args);
+		
 		
 		
 	}

@@ -123,7 +123,7 @@ public class Indexer {
 		return new CharArraySet(wordList, true);
 	}
 	
-	private Document fileToDoc(FileReader fr,String filePath, String fileName)  {
+	public Document fileToDoc(FileReader fr,String filePath, String fileName)  {
 		Document doc = new Document();
 
         //===================================================
@@ -134,5 +134,6 @@ public class Indexer {
         doc.add(new StringField("filename", fileName, Field.Store.YES));
 		return doc;
 	}
+	
 	
 }
