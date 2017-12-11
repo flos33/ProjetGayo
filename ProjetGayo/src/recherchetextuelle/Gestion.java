@@ -38,18 +38,18 @@ public class Gestion  {
 	static Indexer indexer = null;
 	static Searcher searcher = null;
 	static String indexDir ="/Users/pierreo/Projects/M2SITIS/gayo/index";
-	static String corpusDir ="/Users/pierreo/Projects/M2SITIS/gayo/corpus";
+	static String corpusDir ="/Users/pierreo/Projects/M2SITIS/gayo/corpusFinal/corpus";
 	static String synonymsFile = "/Users/pierreo/Projects/M2SITIS/gayo/synonyms.txt";
 	
 	public static void main(String[] args) throws ParseException {
 		
 		 
 		try {
-			/*indexer = new Indexer(indexDir,synonymsFile);
+			indexer = new Indexer(indexDir,synonymsFile);
 			
 			indexer.indexFileOrDirectory(corpusDir);
 			
-			indexer.closeIndex();*/
+			indexer.closeIndex();
 			
 			
 			
@@ -60,7 +60,7 @@ public class Gestion  {
 			terms.add("dec");
 			searcher.phraseQuery(terms);*/
 			//TODO Gerer un chargement des char arrayset de phrase à autophraser depuis file ou user input
-			
+			//searcher.query("ce n'est pere un idm ");
 			searcher.findSusDec();
 			
 			

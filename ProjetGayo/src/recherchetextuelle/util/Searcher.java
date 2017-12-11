@@ -46,7 +46,7 @@ public class Searcher {
 	}
 	
 	public void query(String queryString) throws ParseException, IOException {
-		collector = TopScoreDocCollector.create(5);
+		collector = TopScoreDocCollector.create(150);
         Query q = new ComplexPhraseQueryParser("contents", analyzer).parse(queryString);
         
         System.out.println(q);
@@ -63,7 +63,7 @@ public class Searcher {
 	}
 	public void findSusDec() throws ParseException, IOException {
 		//-----Create all susDecs query-----
-        int distance = 2;
+        int distance = 3;
         boolean ordered = true;
         SpanQuery susdec = new SpanTermQuery(new Term("contents", "sus_dec"));
         SpanQuery negation = new SpanTermQuery(new Term("contents", "pas"));
@@ -108,7 +108,7 @@ public class Searcher {
   		ArrayList<Integer> susDecNoAcrDocIds = new ArrayList<>();
   		ArrayList<Float> susDecNoAcrScores = new ArrayList<>();
 
-  		collector = TopScoreDocCollector.create(5);
+  		collector = TopScoreDocCollector.create(150);
           searcher.search(susDecNoAcrBQ.build(), collector);
           ScoreDoc[] susDecNoAcrHits = collector.topDocs().scoreDocs;
 
@@ -155,28 +155,6 @@ public class Searcher {
 	          }
 		}
 		
-	
-	
-	public void fuzzyQuery(String nom, String prenom, String sexe, String ddn) throws IOException {
-		Builder booleanQuery = new BooleanQuery.Builder();
-		
-		FuzzyQuery query1 = new FuzzyQuery(new Term("nom", nom));
-		FuzzyQuery query2 = new FuzzyQuery(new Term("prenom", prenom));
-		FuzzyQuery query3 = new FuzzyQuery(new Term("sexe", sexe));
-		FuzzyQuery query4 = new FuzzyQuery(new Term("ddn", ddn));
-		
-		booleanQuery.add(query1, Occur.MUST);
-		booleanQuery.add(query2, Occur.MUST);
-		booleanQuery.add(query3, Occur.MUST);
-		booleanQuery.add(query4, Occur.MUST);
-		
-		searcher.search(booleanQuery.build(),this.collector);
- 		ScoreDoc[] hits = this.collector.topDocs().scoreDocs;
-		for(int i=0;i<hits.length;++i) {
-	          int docId = hits[i].doc;
-	          Document d = searcher.doc(docId);
-	          System.out.println((i + 1) + ". " + d.get("nom") + d.get("prenom") + d.get("sexe") + d.get("ddn") + " score=" + hits[i].score);
-	        }
-	}
+
 	
 }
