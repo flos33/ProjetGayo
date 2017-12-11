@@ -46,7 +46,7 @@ public class Searcher {
 	}
 	
 	public void query(String queryString) throws ParseException, IOException {
-		collector = TopScoreDocCollector.create(5);
+		collector = TopScoreDocCollector.create(150);
         Query q = new ComplexPhraseQueryParser("contents", analyzer).parse(queryString);
         
         System.out.println(q);
@@ -63,13 +63,14 @@ public class Searcher {
 	}
 	public void findSusDec() throws ParseException, IOException {
 		//-----Create all susDecs query-----
-        int distance = 2;
-        boolean ordered = true;
+        int distance = 3;
+        boolean ordered = false;
         SpanQuery susdec = new SpanTermQuery(new Term("contents", "sus_dec"));
         SpanQuery negation = new SpanTermQuery(new Term("contents", "pas"));
-        SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { susdec, negation },
+        SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { negation, susdec },
         distance, ordered);
-        Query susDecTot = new SpanNotQuery(susdec, negationSusdec);
+        Query susDecTot = new SpanNotQuery(susdec, negationSusdec,distance);
+        System.out.println(susDecTot);
         //-----created all susDecs query-----
         
         
@@ -104,7 +105,7 @@ public class Searcher {
         
         //-----Obtain susDecsNoAcr docIDs-----
   		ArrayList<Integer> susDecNoAcrDocIds = new ArrayList<>();
-  		collector = TopScoreDocCollector.create(5);
+  		collector = TopScoreDocCollector.create(150);
           searcher.search(susDecNoAcrBQ.build(), collector);
           ScoreDoc[] susDecNoAcrHits = collector.topDocs().scoreDocs;
 
