@@ -46,7 +46,7 @@ public class Searcher {
 	}
 	
 	public void query(String queryString) throws ParseException, IOException {
-		collector = TopScoreDocCollector.create(5);
+		collector = TopScoreDocCollector.create(150);
         Query q = new ComplexPhraseQueryParser("contents", analyzer).parse(queryString);
         
         System.out.println(q);
@@ -64,12 +64,15 @@ public class Searcher {
 	public void findSusDec() throws ParseException, IOException {
 		//-----Create all susDecs query-----
         int distance = 2;
-        boolean ordered = true;
+
+        boolean ordered = false;
+
         SpanQuery susdec = new SpanTermQuery(new Term("contents", "sus_dec"));
         SpanQuery negation = new SpanTermQuery(new Term("contents", "pas"));
-        SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { susdec, negation },
+        SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { negation, susdec },
         distance, ordered);
-        Query susDecTot = new SpanNotQuery(susdec, negationSusdec);
+        Query susDecTot = new SpanNotQuery(susdec, negationSusdec,distance);
+        System.out.println(susDecTot);
         //-----created all susDecs query-----
         
         
@@ -84,6 +87,7 @@ public class Searcher {
 		
 		//-----Obtain susDecsAndAcr docIDs-----
 		ArrayList<Integer> susDecAndAcrDocIds = new ArrayList<>();
+		ArrayList<Float> susDecAndAcrScores = new ArrayList<>();
         
         searcher.search(susDecAndAcrBQ.build(), collector);
         ScoreDoc[] susDecAndAcrHits = collector.topDocs().scoreDocs;
@@ -91,6 +95,7 @@ public class Searcher {
         for(int i=0;i<susDecAndAcrHits.length;++i) {
           int docId = susDecAndAcrHits[i].doc;
           susDecAndAcrDocIds.add(docId);
+          susDecAndAcrScores.add((float) susDecAndAcrHits[i].score);
         }
         //-----obtained susDecsAndAcr docIDs-----
         
@@ -104,13 +109,18 @@ public class Searcher {
         
         //-----Obtain susDecsNoAcr docIDs-----
   		ArrayList<Integer> susDecNoAcrDocIds = new ArrayList<>();
-  		collector = TopScoreDocCollector.create(5);
+
+  		ArrayList<Float> susDecNoAcrScores = new ArrayList<>();
+
+  		collector = TopScoreDocCollector.create(150);
           searcher.search(susDecNoAcrBQ.build(), collector);
           ScoreDoc[] susDecNoAcrHits = collector.topDocs().scoreDocs;
 
           for(int i=0;i<susDecNoAcrHits.length;++i) {
             int docId = susDecNoAcrHits[i].doc;
             susDecNoAcrDocIds.add(docId);
+            susDecNoAcrScores.add((float) susDecNoAcrHits[i].score);
+
           }
         //-----obtained susDecsNoAcr docIDs-----
           
@@ -119,7 +129,7 @@ public class Searcher {
           for(int i=0;i<susDecNoAcrDocIds.size();++i) {
 	          int docId = susDecNoAcrDocIds.get(i);
 	          Document d = searcher.doc(docId);
-	          System.out.println((i + 1) + ". " + d.get("path"));
+	          System.out.println((i + 1) + ". " + d.get("path") + "\tscore= "+ susDecNoAcrScores.get(i) );
 	          }
         //-----displayed susDecNoAcr -----
         //-----Display susDecAndAcr -----
@@ -127,7 +137,7 @@ public class Searcher {
           for(int i=0;i<susDecAndAcrDocIds.size();++i) {
 	          int docId = susDecAndAcrDocIds.get(i);
 	          Document d = searcher.doc(docId);
-	          System.out.println((i + 1) + ". " + d.get("path"));
+	          System.out.println((i + 1) + ". " + d.get("path") + "\tscore= "+ susDecAndAcrScores.get(i));
 	          }
         //-----displayed susDecAndAcr -----
 	}
@@ -149,28 +159,6 @@ public class Searcher {
 	          }
 		}
 		
-	
-	
-	public void fuzzyQuery(String nom, String prenom, String sexe, String ddn) throws IOException {
-		Builder booleanQuery = new BooleanQuery.Builder();
-		
-		FuzzyQuery query1 = new FuzzyQuery(new Term("nom", nom));
-		FuzzyQuery query2 = new FuzzyQuery(new Term("prenom", prenom));
-		FuzzyQuery query3 = new FuzzyQuery(new Term("sexe", sexe));
-		FuzzyQuery query4 = new FuzzyQuery(new Term("ddn", ddn));
-		
-		booleanQuery.add(query1, Occur.MUST);
-		booleanQuery.add(query2, Occur.MUST);
-		booleanQuery.add(query3, Occur.MUST);
-		booleanQuery.add(query4, Occur.MUST);
-		
-		searcher.search(booleanQuery.build(),this.collector);
- 		ScoreDoc[] hits = this.collector.topDocs().scoreDocs;
-		for(int i=0;i<hits.length;++i) {
-	          int docId = hits[i].doc;
-	          Document d = searcher.doc(docId);
-	          System.out.println((i + 1) + ". " + d.get("nom") + d.get("prenom") + d.get("sexe") + d.get("ddn") + " score=" + hits[i].score);
-	        }
-	}
+
 	
 }

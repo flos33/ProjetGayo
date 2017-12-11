@@ -7,6 +7,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.WordlistLoader;
 import org.apache.lucene.analysis.core.UnicodeWhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceTokenizer;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.Analyzer.TokenStreamComponents;
 import org.apache.lucene.analysis.fr.FrenchLightStemFilter;
+import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter;
 import org.apache.lucene.analysis.snowball.SnowballFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -39,7 +41,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  /** File containing default French stopwords. */
 	  public final static String DEFAULT_STOPWORD_FILE = "french_stop.txt";
 	  FileReader synonymFileReader;
-	  SolrSynonymParser synonymParser = new SolrSynonymParser(true, true, new StandardAnalyzer());
+	  SolrSynonymParser synonymParser = new SolrSynonymParser(true, true, new SynonymsAnalyzer());
 	  
 	  /** Default set of articles for ElisionFilter */
 	  public static final CharArraySet DEFAULT_ARTICLES = CharArraySet.unmodifiableSet(
@@ -48,12 +50,15 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 
 	  public static final CharArraySet defaultStopWords = CharArraySet.unmodifiableSet(
 		      new CharArraySet(Arrays.asList(
-			          ":","d"), true));
+			          ":","d","un","de","des","plusieur","plusieurs","une","il","elle","ils"
+			          ,"on","y","a","1","2","3","4","5","6","7","8","9"), true));
 	  
 	  /**
 	   * Contains words that should be indexed but not stemmed.
 	   */
-	  private final CharArraySet excltable;
+	  private  CharArraySet excltable = CharArraySet.unmodifiableSet(
+		      new CharArraySet(Arrays.asList(
+			          "pas"), true));;
 
 	  /**
 	   * Returns an unmodifiable instance of the default stop-words set.
@@ -131,16 +136,16 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	   */
 	@Override
 	  protected TokenStreamComponents createComponents(String fieldName) {
-	    final Tokenizer source = new StandardTokenizer();
+	    final Tokenizer source = new WhitespaceTokenizer();
 	    TokenStream result = new StandardFilter(source);
+	    result = new ASCIIFoldingFilter(result);
 	    result = new ElisionFilter(result, DEFAULT_ARTICLES);
 	    result = new LowerCaseFilter(result);
-	    result = new StopFilter(result, stopwords);
+	    //result = new StopFilter(result, stopwords);
 	    result = new StopFilter(result, defaultStopWords);
 	    @SuppressWarnings("deprecation")
 		CharArraySet phrases = new org.apache.lucene.analysis.util.CharArraySet(Arrays.asList(
-	            "sus dec", "sus decalage", "sus ST", "no flow","arret cardio respiratoire"
-	            ), false);
+	            "sus dec"), false);
 		result = new AutoPhrasingTokenFilter(result, phrases, false);
 
 	    
