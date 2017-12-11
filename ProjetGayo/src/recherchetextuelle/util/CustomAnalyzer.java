@@ -22,6 +22,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.Analyzer.TokenStreamComponents;
 import org.apache.lucene.analysis.fr.FrenchLightStemFilter;
+import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter;
 import org.apache.lucene.analysis.snowball.SnowballFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -137,14 +138,15 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  protected TokenStreamComponents createComponents(String fieldName) {
 	    final Tokenizer source = new WhitespaceTokenizer();
 	    TokenStream result = new StandardFilter(source);
+	    //result = new ASCIIFoldingFilter(result);
 	    result = new ElisionFilter(result, DEFAULT_ARTICLES);
 	    result = new LowerCaseFilter(result);
 	    //result = new StopFilter(result, stopwords);
 	    result = new StopFilter(result, defaultStopWords);
 	    @SuppressWarnings("deprecation")
 		CharArraySet phrases = new org.apache.lucene.analysis.util.CharArraySet(Arrays.asList(
-	            "sus dec", "sus decalage", "sus ST", "no flow","arret cardio respiratoire"
-	            ), false);
+	            "sus dec", "sus decalage", "sus st", "no flow","arret cardio respiratoire"
+	            , "bloc branche g", "st +","st >"), false);
 		result = new AutoPhrasingTokenFilter(result, phrases, false);
 
 	    

@@ -60,8 +60,8 @@ public class Gestion  {
 			terms.add("dec");
 			searcher.phraseQuery(terms);*/
 			//TODO Gerer un chargement des char arrayset de phrase à autophraser depuis file ou user input
-
-			searcher.findSusDec();
+			searcher.query("sus dec");
+			//searcher.findSusDec();
 			
 			
 			
