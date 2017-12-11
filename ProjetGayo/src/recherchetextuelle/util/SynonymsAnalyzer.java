@@ -7,7 +7,6 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceTokenizer;
-import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 
@@ -23,7 +22,6 @@ public final class SynonymsAnalyzer extends Analyzer {
 	  protected TokenStreamComponents createComponents(final String fieldName) {
 		  final Tokenizer source = new WhitespaceTokenizer();
 		  TokenStream result = new LowerCaseFilter(source);
-		  result = new ASCIIFoldingFilter(result);
 		  return new TokenStreamComponents(source, result);
 	  }
 	}

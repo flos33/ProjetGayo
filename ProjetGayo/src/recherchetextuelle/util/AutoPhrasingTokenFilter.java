@@ -422,7 +422,7 @@ public class AutoPhrasingTokenFilter extends TokenFilter {
 	  }
   
 	
-  private CharArrayMap<CharArraySet> convertPhraseSet( org.apache.lucene.analysis.CharArraySet phrases ) {
+  private CharArrayMap convertPhraseSet( org.apache.lucene.analysis.CharArraySet phrases ) {
 	CharArrayMap<CharArraySet> phraseMap = new CharArrayMap( 100, false);
 	Iterator<Object> phraseIt = phrases.iterator( ); 
 	while (phraseIt != null && phraseIt.hasNext() ) {

@@ -138,14 +138,15 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  protected TokenStreamComponents createComponents(String fieldName) {
 	    final Tokenizer source = new WhitespaceTokenizer();
 	    TokenStream result = new StandardFilter(source);
-	    result = new ASCIIFoldingFilter(result);
+	    //result = new ASCIIFoldingFilter(result);
 	    result = new ElisionFilter(result, DEFAULT_ARTICLES);
 	    result = new LowerCaseFilter(result);
 	    //result = new StopFilter(result, stopwords);
 	    result = new StopFilter(result, defaultStopWords);
 	    @SuppressWarnings("deprecation")
 		CharArraySet phrases = new org.apache.lucene.analysis.util.CharArraySet(Arrays.asList(
-	            "sus dec"), false);
+	            "sus dec", "sus decalage", "sus st", "no flow","arret cardio respiratoire"
+	            , "bloc branche g", "st +","st >"), false);
 		result = new AutoPhrasingTokenFilter(result, phrases, false);
 
 	    
