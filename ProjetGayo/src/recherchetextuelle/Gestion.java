@@ -38,8 +38,8 @@ public class Gestion  {
 	static Indexer indexer = null;
 	static Searcher searcher = null;
 	static String indexDir ="/Users/pierreo/Projects/M2SITIS/gayo/index";
-	static String corpusDir ="/Users/pierreo/Projects/M2SITIS/gayo/corpusFinal/corpus";
-	static String synonymsFile = "/Users/pierreo/Projects/M2SITIS/gayo/synonyms.txt";
+	static String corpusDir ="/Users/pierreo/Projects/M2SITIS/gayo/corpus";
+	static String synonymsFile = "/Users/pierreo/Projects/M2SITIS/gayo/synonymsTests1.txt";
 	
 	public static void main(String[] args) throws ParseException {
 		
@@ -60,7 +60,7 @@ public class Gestion  {
 			terms.add("dec");
 			searcher.phraseQuery(terms);*/
 			//TODO Gerer un chargement des char arrayset de phrase à autophraser depuis file ou user input
-			searcher.query(" sus dec");
+			searcher.query("sus dec");
 			//searcher.findSusDec();
 			
 			
