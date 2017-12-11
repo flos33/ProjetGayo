@@ -49,7 +49,8 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 
 	  public static final CharArraySet defaultStopWords = CharArraySet.unmodifiableSet(
 		      new CharArraySet(Arrays.asList(
-			          ":","d","un"), true));
+			          ":","d","un","de","des","plusieur","plusieurs","une","il","elle","ils"
+			          ,"on","y","a","1","2","3","4","5","6","7","8","9"), true));
 	  
 	  /**
 	   * Contains words that should be indexed but not stemmed.

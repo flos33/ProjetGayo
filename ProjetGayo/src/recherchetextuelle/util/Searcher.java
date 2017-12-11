@@ -63,12 +63,10 @@ public class Searcher {
 	}
 	public void findSusDec() throws ParseException, IOException {
 		//-----Create all susDecs query-----
-        int distance = 3;
-<<<<<<< HEAD
-        boolean ordered = true;
-=======
+        int distance = 2;
+
         boolean ordered = false;
->>>>>>> refs/heads/testinIndexSynonym
+
         SpanQuery susdec = new SpanTermQuery(new Term("contents", "sus_dec"));
         SpanQuery negation = new SpanTermQuery(new Term("contents", "pas"));
         SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { negation, susdec },
@@ -111,11 +109,9 @@ public class Searcher {
         
         //-----Obtain susDecsNoAcr docIDs-----
   		ArrayList<Integer> susDecNoAcrDocIds = new ArrayList<>();
-<<<<<<< HEAD
+
   		ArrayList<Float> susDecNoAcrScores = new ArrayList<>();
 
-=======
->>>>>>> refs/heads/testinIndexSynonym
   		collector = TopScoreDocCollector.create(150);
           searcher.search(susDecNoAcrBQ.build(), collector);
           ScoreDoc[] susDecNoAcrHits = collector.topDocs().scoreDocs;

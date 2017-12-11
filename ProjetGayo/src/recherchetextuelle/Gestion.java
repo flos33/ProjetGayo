@@ -45,11 +45,11 @@ public class Gestion  {
 		
 		 
 		try {
-			indexer = new Indexer(indexDir,synonymsFile);
+			/*indexer = new Indexer(indexDir,synonymsFile);
 			
 			indexer.indexFileOrDirectory(corpusDir);
 			
-			indexer.closeIndex();
+			indexer.closeIndex();*/
 			
 			
 			
@@ -60,11 +60,7 @@ public class Gestion  {
 			terms.add("dec");
 			searcher.phraseQuery(terms);*/
 			//TODO Gerer un chargement des char arrayset de phrase à autophraser depuis file ou user input
-<<<<<<< HEAD
-			//searcher.query("ce n'est pere un idm ");
-=======
-			//searcher.query("pas d'idm");
->>>>>>> refs/heads/testinIndexSynonym
+
 			searcher.findSusDec();
 			
 			
