@@ -77,13 +77,10 @@ public class Searcher {
           
         }
         System.out.println(docList);
- 
+        return docList;
        
-
 	}
 	
-	 public ArrayList<String> getItems () {
-	     return docList;}
 	
 	public void phraseQuery(ArrayList<String> termsList) throws IOException {
 		PhraseQuery.Builder builder = new PhraseQuery.Builder();

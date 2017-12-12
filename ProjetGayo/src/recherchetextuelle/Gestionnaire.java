@@ -38,26 +38,29 @@ public class Gestionnaire extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("recherchetextuelle");
-
         initPanneauUtilisateur();
 
         showRechercheDoc();
+    }
+    public void createSearcher(String indexDirectory, String synonymsFile) throws IOException, ParseException{
+    	searcher = new Searcher(indexDirectory,synonymsFile);
     }
     
     public Gestionnaire() {
         // Add some sample data
  
-    /*
+    
+    	
     	Iterator<String> itr = docList.iterator();
     	while(itr.hasNext())
     	      system.out.println(itr.next());
     	
     	
     	
-    	for(int i = 0 ; i < docList.size; i++)
-    	String pathi = docList.g	
+    	for(int i = 0 ; i < get.size; i++)
+    	String pathi = recherchetextuelle.util.Searcher.ge	
     	
-    	*/
+    	
     	
         docListe.add(new Document("Hans", "Muster"));
         docListe.add(new Document("Ruth", "Mueller"));
