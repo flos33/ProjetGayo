@@ -51,17 +51,17 @@ public class AutoPhrasingTokenFilter extends TokenFilter {
   private char[] lastEmitted = null;
   private char[] lastValid = null;
 
-  private Character replaceWhitespaceWith = null;
+  private Character replaceWhitespaceWith = '_';
   
   private int positionIncr = 0;
 	
-  public AutoPhrasingTokenFilter( TokenStream input, CharArraySet phraseSet, boolean emitSingleTokens ) {
+  public AutoPhrasingTokenFilter( TokenStream input, org.apache.lucene.analysis.CharArraySet phrases, boolean emitSingleTokens ) {
     super(input);
     	
     // Convert to CharArrayMap by iterating the char[] strings and
     // putting them into the CharArrayMap with Integer of the number
     // of tokens in the map: need this to determine when a phrase match is completed.
-    this.phraseMap = convertPhraseSet( phraseSet );
+    this.phraseMap = convertPhraseSet( phrases );
     this.emitSingleTokens = emitSingleTokens;
   }
     
@@ -422,9 +422,9 @@ public class AutoPhrasingTokenFilter extends TokenFilter {
 	  }
   
 	
-  private CharArrayMap convertPhraseSet( CharArraySet phraseSet ) {
+  private CharArrayMap convertPhraseSet( org.apache.lucene.analysis.CharArraySet phrases ) {
 	CharArrayMap<CharArraySet> phraseMap = new CharArrayMap( 100, false);
-	Iterator<Object> phraseIt = phraseSet.iterator( ); 
+	Iterator<Object> phraseIt = phrases.iterator( ); 
 	while (phraseIt != null && phraseIt.hasNext() ) {
 	  char[] phrase = (char[])phraseIt.next();
 

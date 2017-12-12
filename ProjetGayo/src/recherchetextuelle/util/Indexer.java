@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.apache.lucene.analysis.CharArraySet;
@@ -27,13 +28,21 @@ public class Indexer {
 
 	// private static EnglishAnalyzer analyzer = new
 	// EnglishAnalyzer(Version.LUCENE_40, EnglishAnalyzer.getDefaultStopSet());
-	private static CustomAnalyzer analyzer = new CustomAnalyzer();
+	private static CustomAnalyzer analyzer;
 	private static IndexWriter writer;  // retirer le static pour que chaque objet index ai son writer specific
 	private  ArrayList<File> queue = new ArrayList<File>();
 	
 
+	public Indexer(String indexDir, String synonymFilePath) throws IOException, ParseException {
+		FileReader synonymFileReader = new FileReader(new File(synonymFilePath));
+		analyzer = new CustomAnalyzer(synonymFileReader);
+		FSDirectory dir = FSDirectory.open(Paths.get(indexDir));
+		IndexWriterConfig config = new IndexWriterConfig(analyzer);
+		writer = new IndexWriter(dir, config);
+	}
+	
 	public Indexer(String indexDir) throws IOException {
-		
+		analyzer = new CustomAnalyzer();
 		FSDirectory dir = FSDirectory.open(Paths.get(indexDir));
 		IndexWriterConfig config = new IndexWriterConfig(analyzer);
 		writer = new IndexWriter(dir, config);
