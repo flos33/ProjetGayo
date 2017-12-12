@@ -51,7 +51,7 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  public static final CharArraySet defaultStopWords = CharArraySet.unmodifiableSet(
 		      new CharArraySet(Arrays.asList(
 			          ":","d","un","de","des","plusieur","plusieurs","une","il","elle","ils"
-			          ,"on","y","a","1","2","3","4","5","6","7","8","9"), true));
+			          ,"on","y","a","1","3","4","5","6","7","8","9","eu","u","eut"), true));
 	  
 	  /**
 	   * Contains words that should be indexed but not stemmed.
@@ -138,14 +138,14 @@ public class CustomAnalyzer extends StopwordAnalyzerBase {
 	  protected TokenStreamComponents createComponents(String fieldName) {
 	    final Tokenizer source = new WhitespaceTokenizer();
 	    TokenStream result = new StandardFilter(source);
-	    //result = new ASCIIFoldingFilter(result);
+	    result = new ASCIIFoldingFilter(result);
 	    result = new ElisionFilter(result, DEFAULT_ARTICLES);
 	    result = new LowerCaseFilter(result);
 	    //result = new StopFilter(result, stopwords);
 	    result = new StopFilter(result, defaultStopWords);
 	    @SuppressWarnings("deprecation")
 		CharArraySet phrases = new org.apache.lucene.analysis.util.CharArraySet(Arrays.asList(
-	            "sus dec", "sus decalage", "sus st", "no flow","arret cardio respiratoire"
+	            "sus dec", "sus decalage", " sus st", "no flow","arret cardio respiratoire"
 	            , "bloc branche g", "st +","st >"), false);
 		result = new AutoPhrasingTokenFilter(result, phrases, false);
 

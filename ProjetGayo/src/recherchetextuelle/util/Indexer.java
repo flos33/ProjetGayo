@@ -31,14 +31,17 @@ public class Indexer {
 	private static CustomAnalyzer analyzer;
 	private static IndexWriter writer;  // retirer le static pour que chaque objet index ai son writer specific
 	private  ArrayList<File> queue = new ArrayList<File>();
+	private CustomSimilarity noTfSimilarity = new CustomSimilarity();
 	
-
+	
 	public Indexer(String indexDir, String synonymFilePath) throws IOException, ParseException {
 		FileReader synonymFileReader = new FileReader(new File(synonymFilePath));
 		analyzer = new CustomAnalyzer(synonymFileReader);
 		FSDirectory dir = FSDirectory.open(Paths.get(indexDir));
 		IndexWriterConfig config = new IndexWriterConfig(analyzer);
+		config.setSimilarity(noTfSimilarity);
 		writer = new IndexWriter(dir, config);
+		
 	}
 	
 	public Indexer(String indexDir) throws IOException {

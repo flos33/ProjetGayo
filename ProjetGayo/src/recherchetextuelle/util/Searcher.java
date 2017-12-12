@@ -37,16 +37,18 @@ public class Searcher {
 	static TopScoreDocCollector collector = TopScoreDocCollector.create(5);
 	static FileReader synonymFileReader;
 	CustomAnalyzer analyzer;
+	private CustomSimilarity noTfSimilarity = new CustomSimilarity();
 	
 	public Searcher(String indexDir, String synonymFilePath) throws IOException, java.text.ParseException {
 		FileReader synonymFileReader = new FileReader(new File(synonymFilePath));
 		analyzer = new CustomAnalyzer(synonymFileReader);
 	    reader = DirectoryReader.open( FSDirectory.open(new File(indexDir).toPath()));
 	    searcher = new IndexSearcher(reader);
+	    searcher.setSimilarity(noTfSimilarity);
 	}
 	
 	public void query(String queryString) throws ParseException, IOException {
-		collector = TopScoreDocCollector.create(150);
+		collector = TopScoreDocCollector.create(10000);
         Query q = new ComplexPhraseQueryParser("contents", analyzer).parse(queryString);
         
         System.out.println(q);
@@ -65,14 +67,15 @@ public class Searcher {
 		//-----Create all susDecs query-----
         int distance = 2;
 
-        boolean ordered = false;
+        boolean ordered = true;
 
         SpanQuery susdec = new SpanTermQuery(new Term("contents", "sus_dec"));
         SpanQuery negation = new SpanTermQuery(new Term("contents", "pas"));
         SpanQuery negationSusdec = new SpanNearQuery(new SpanQuery[] { negation, susdec },
         distance, ordered);
-        Query susDecTot = new SpanNotQuery(susdec, negationSusdec,distance);
+        Query susDecTot = new SpanNotQuery(susdec, negationSusdec);
         System.out.println(susDecTot);
+        
         //-----created all susDecs query-----
         
         
@@ -82,6 +85,7 @@ public class Searcher {
         susDecAndAcrBQ.add(susDecTot, Occur.MUST);
 		TermQuery acr = new TermQuery(new Term("contents","acr"));
 		susDecAndAcrBQ.add(acr, Occur.MUST);
+		
         
 		//-----created susDecs and acr query-----
 		
@@ -112,7 +116,7 @@ public class Searcher {
 
   		ArrayList<Float> susDecNoAcrScores = new ArrayList<>();
 
-  		collector = TopScoreDocCollector.create(150);
+  		collector = TopScoreDocCollector.create(10000);
           searcher.search(susDecNoAcrBQ.build(), collector);
           ScoreDoc[] susDecNoAcrHits = collector.topDocs().scoreDocs;
 
