@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import recherchetextuelle.Gestionnaire;
 import recherchetextuelle.model.Document;
 
@@ -24,6 +25,8 @@ public class RechercheDocController {
     private Label iLabel;
     @FXML
     private Label pathLabel;
+
+
     /*
     @FXML
     private Label scoreLabel;
