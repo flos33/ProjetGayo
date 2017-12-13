@@ -53,13 +53,13 @@ public class RechercheDocController {
     	@FXML
         private void handleDefinirIndexBtn() {
             String selectedPath = indexField.getText();
-            gestionnaire.setCorpusDir(selectedPath);
+            gestionnaire.setIndexDir(selectedPath);
         }
     	
     	@FXML
         private void handleDefinirSynonymesBtn() {
-            String selectedPath = indexField.getText();
-            gestionnaire.setCorpusDir(selectedPath);
+            String selectedPath = synonymesField.getText();
+            gestionnaire.setSynonymsFile(selectedPath);
         }
     	@FXML
         private void handleLaunchIndexingBtn() {
@@ -77,8 +77,11 @@ public class RechercheDocController {
     			String synonymesFile = gestionnaire.getSynonymsFile();
             try {
             	gestionnaire.setSearcher(new Searcher(indexDir, synonymesFile));
-            	gestionnaire.getSearcher().findSusDecs();
+            	gestionnaire.getSearcher().findSusDec();
 			} catch (IOException | ParseException e) {
+				e.printStackTrace();
+			} catch (org.apache.lucene.queryparser.classic.ParseException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

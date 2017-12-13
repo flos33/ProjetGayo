@@ -156,37 +156,6 @@ public class Gestionnaire extends Application {
    
 
 	public static void main(String[] args) throws ParseException {
-		
-		
-	 
-		try {
-			/*indexer = new Indexer(indexDir);
-			
-			indexer.indexFileOrDirectory(corpusDir);
-			
-			indexer.closeIndex();
-			*/
-			
-			
-			searcher = new Searcher(indexDir, synonymsFile);
-			
-			/*ArrayList<String> terms = new ArrayList<String>();
-			terms.add("sus");
-			terms.add("dec");
-			searcher.phraseQuery(terms);*/
-			
-			searcher.query(
-					"sus dec doul tho"
-					);
-			
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (org.apache.lucene.queryparser.classic.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 
 		launch(args);
 		
