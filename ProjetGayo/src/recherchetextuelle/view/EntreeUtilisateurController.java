@@ -1,8 +1,14 @@
 package recherchetextuelle.view;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import recherchetextuelle.Gestionnaire;
@@ -19,6 +25,8 @@ public class EntreeUtilisateurController {
     
     private Stage dialogStage;
     private boolean okClicked = false;
+    private Stage secondaryStage;
+    private BorderPane panneauUtilisateur;
     
     // Reference to the main application.
     private Gestionnaire gestionaire;
@@ -29,8 +37,60 @@ public class EntreeUtilisateurController {
      */
     @FXML
     private void initialize() {
+    	   
+    	   }
+    
+    public void starttwo(Stage secondaryStage) {
+	       this.secondaryStage = secondaryStage;
+	       this.secondaryStage.setTitle("recherchetextuelle");
+	       initPanneauUtilisateur();
+	       showRechercheDoc();
+    	    
     }
     
+    
+    /**
+     * Afficher les champs de recherche dans le panneau Utilisateur
+     */
+    
+    public void showRechercheDoc() {
+        try {
+            // Charge le fichier fxml rechercheDoc.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Gestionnaire.class.getResource("view/rechercheDoc.fxml"));
+            AnchorPane rechercheDoc = (AnchorPane) loader.load();
+
+            // Affiche le doc au centre du panneau Utilisateur.
+            panneauUtilisateur.setCenter(rechercheDoc);
+            // Give the controller access to the main app.
+            RechercheDocController controller = loader.getController();
+            controller.setGestionnaire(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    /**
+     * Initialise le panneau Utilisateur.
+     */
+    
+    public void initPanneauUtilisateur() {
+        try {
+            // Charge le fichier fxml panneauUtilisateur.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Gestionnaire.class.getResource("view/panneauUtilisateur.fxml"));
+            panneauUtilisateur = (BorderPane) loader.load();
+
+            // Affiche le panneau Utilisateur.
+            Scene scene = new Scene(panneauUtilisateur);
+            secondaryStage.setScene(scene);
+            secondaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     
 
     /**

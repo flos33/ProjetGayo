@@ -45,13 +45,7 @@ public class Gestionnaire extends Application {
         
     }
    
-   public void starttwo(Stage secondaryStage) {
-       this.secondaryStage = secondaryStage;
-       this.secondaryStage.setTitle("recherchetextuelle");
-       initPanneauUtilisateur();
-       showRechercheDoc();
-   }
-    
+
     
     public void createSearcher(String indexDirectory, String synonymsFile) throws IOException, ParseException{
     	searcher = new Searcher(indexDirectory,synonymsFile);
@@ -116,55 +110,9 @@ public class Gestionnaire extends Application {
         }
     }
     
-    /**
-     * Afficher les champs de recherche dans le panneau Utilisateur
-     */
+   
     
-    public void showRechercheDoc() {
-        try {
-            // Charge le fichier fxml rechercheDoc.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Gestionnaire.class.getResource("view/rechercheDoc.fxml"));
-            AnchorPane rechercheDoc = (AnchorPane) loader.load();
-
-            // Affiche le doc au centre du panneau Utilisateur.
-            panneauUtilisateur.setCenter(rechercheDoc);
-            // Give the controller access to the main app.
-            RechercheDocController controller = loader.getController();
-            controller.setGestionnaire(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
-    /**
-     * Initialise le panneau Utilisateur.
-     */
-    
-    public void initPanneauUtilisateur() {
-        try {
-            // Charge le fichier fxml panneauUtilisateur.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Gestionnaire.class.getResource("view/panneauUtilisateur.fxml"));
-            panneauUtilisateur = (BorderPane) loader.load();
-
-            // Affiche le panneau Utilisateur.
-            Scene scene = new Scene(panneauUtilisateur);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    
-    
-   public void programme(){ 
-    	 		initPanneauUtilisateur();
-    		showRechercheDoc();
-    		System.out.println("ok");
-    	}
+  
 
     
     
