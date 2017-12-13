@@ -17,7 +17,7 @@ import recherchetextuelle.util.Searcher;
 
 public class RechercheDocController {
 	
-	// Reference to the main application.
+	// Reference à l'application principale.
     private Gestionnaire gestionnaire;
     
 	@FXML
@@ -50,21 +50,25 @@ public class RechercheDocController {
     private void handleDefinirCorpusBtn() {
         String selectedPath = corpusField.getText();
         gestionnaire.setCorpusDir(selectedPath);
+
     }
     	@FXML
         private void handleDefinirIndexBtn() {
-            String selectedPath = indexField.getText();
-            gestionnaire.setIndexDir(selectedPath);
+            String indexDir = indexField.getText();
+            gestionnaire.setIndexDir(indexDir);
+
         }
     	
     	@FXML
         private void handleDefinirSynonymesBtn() {
-            String selectedPath = synonymesField.getText();
-            gestionnaire.setSynonymsFile(selectedPath);
+            String synonymsFile = synonymesField.getText();
+            gestionnaire.setSynonymsFile(synonymsFile);
+ 
         }
     	@FXML
         private void handleLaunchIndexingBtn() {
     			String corpusDir = gestionnaire.getCorpusDir();
+    			System.out.println(corpusDir);
             try {
 				gestionnaire.getIndexer().indexFileOrDirectory(corpusDir);
 			} catch (IOException e) {
@@ -75,9 +79,9 @@ public class RechercheDocController {
     	@FXML
         private void handleLaunchSearchBtn() {
     			String indexDir = gestionnaire.getIndexDir();
-    			String synonymesFile = gestionnaire.getSynonymsFile();
+    			String synonymsFile = gestionnaire.getSynonymsFile();
             try {
-            	gestionnaire.setSearcher(new Searcher(indexDir, synonymesFile));
+            	gestionnaire.setSearcher(new Searcher(indexDir, synonymsFile));
             	
             	int i = 1;
             	for (Iterator<org.apache.lucene.document.Document> iterator = gestionnaire.getSearcher().findSusDec().iterator(); iterator.hasNext();) {

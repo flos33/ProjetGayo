@@ -29,9 +29,9 @@ public class Gestionnaire extends Application {
        
     static Indexer indexer = null;
 	static Searcher searcher = null;
-	static String indexDir ="/Users/ccecqa/Desktop/Gayo/index";
-	static String corpusDir ="/Users/ccecqa/Desktop/Gayo/corpus";
-	static String synonymsFile = "/Users/ccecqa/Downloads/synonyms.txt";
+	static String indexDir /*="/Users/ccecqa/Desktop/Gayo/index"*/;
+	static String corpusDir /*="/Users/ccecqa/Desktop/Gayo/corpus"*/;
+	static String synonymsFile /*= "/Users/ccecqa/Downloads/synonyms.txt"*/;
 	
 
     @Override
@@ -39,7 +39,6 @@ public class Gestionnaire extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("recherchetextuelle");
         initPanneauUtilisateur();
-
         showRechercheDoc();
     }
     public void createSearcher(String indexDirectory, String synonymsFile) throws IOException, ParseException{
