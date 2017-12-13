@@ -2,6 +2,7 @@ package recherchetextuelle.view;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Iterator;
 
 import javafx.beans.property.ReadOnlyFloatProperty;
 import javafx.beans.property.ReadOnlyFloatWrapper;
@@ -77,7 +78,16 @@ public class RechercheDocController {
     			String synonymesFile = gestionnaire.getSynonymsFile();
             try {
             	gestionnaire.setSearcher(new Searcher(indexDir, synonymesFile));
-            	gestionnaire.getSearcher().findSusDec();
+            	
+            	int i = 1;
+            	for (Iterator<org.apache.lucene.document.Document> iterator = gestionnaire.getSearcher().findSusDec().iterator(); iterator.hasNext();) {
+				org.apache.lucene.document.Document d = (org.apache.lucene.document.Document) iterator.next();
+				recherchetextuelle.model.Document doc = 
+					new recherchetextuelle.model.Document(d.get("path"),String.valueOf(i));
+				gestionnaire.getDocListe().add(doc);
+				i++;
+				}
+            
 			} catch (IOException | ParseException e) {
 				e.printStackTrace();
 			} catch (org.apache.lucene.queryparser.classic.ParseException e) {
@@ -116,9 +126,10 @@ public class RechercheDocController {
     public void setGestionnaire(Gestionnaire gestionnaire) {
         this.gestionnaire = gestionnaire;
         docTable.setItems(gestionnaire.getDocListe());
+        /*
         corpusField.setText(gestionnaire.getCorpusDir());
         indexField.setText(gestionnaire.getIndexDir());
-        synonymesField.setText(gestionnaire.getSynonymsFile());
+        synonymesField.setText(gestionnaire.getSynonymsFile());*/
 
     }
 }

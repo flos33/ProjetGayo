@@ -63,7 +63,7 @@ public class Searcher {
           System.out.println((i + 1) + ". " + d.get("path") + " score=" + hits[i].score);
         }
 	}
-	public void findSusDec() throws ParseException, IOException {
+	public ArrayList<Document> findSusDec() throws ParseException, IOException {
 		//-----Create all susDecs query-----
         int distance = 2;
 
@@ -128,12 +128,15 @@ public class Searcher {
           }
         //-----obtained susDecsNoAcr docIDs-----
           
+        ArrayList<Document> docReturned = new ArrayList<>();  
+          
         //-----Display susDecNoAcr -----
           System.out.println("Textes avec susDecs et pas de ACR:");
           for(int i=0;i<susDecNoAcrDocIds.size();++i) {
 	          int docId = susDecNoAcrDocIds.get(i);
 	          Document d = searcher.doc(docId);
 	          System.out.println((i + 1) + ". " + d.get("path") + "\tscore= "+ susDecNoAcrScores.get(i) );
+	          docReturned.add(d);
 	          }
         //-----displayed susDecNoAcr -----
         //-----Display susDecAndAcr -----
@@ -142,7 +145,9 @@ public class Searcher {
 	          int docId = susDecAndAcrDocIds.get(i);
 	          Document d = searcher.doc(docId);
 	          System.out.println((i + 1) + ". " + d.get("path") + "\tscore= "+ susDecAndAcrScores.get(i));
-	          }
+	          docReturned.add(d);
+          }
+          return docReturned;
         //-----displayed susDecAndAcr -----
 	}
 	
