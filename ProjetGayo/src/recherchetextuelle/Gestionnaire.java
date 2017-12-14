@@ -125,7 +125,7 @@ public class Gestionnaire extends Application {
 
 	public  void setIndexDir(String indexDir) {
 		Gestionnaire.indexDir = indexDir;
-
+		System.out.println(Gestionnaire.indexDir);
 		try {
 			indexer = new Indexer(indexDir);
 		} catch (IOException e) {
@@ -142,7 +142,7 @@ public class Gestionnaire extends Application {
 
 	public  void setCorpusDir(String corpusDir) {
 		Gestionnaire.corpusDir = corpusDir;
-
+System.out.println(Gestionnaire.corpusDir);
 	}
 
 	public  String getSynonymsFile() {
@@ -152,6 +152,7 @@ public class Gestionnaire extends Application {
 
 	public  void setSynonymsFile(String synonymsFile) {
 		Gestionnaire.synonymsFile = synonymsFile;
+		System.out.println(Gestionnaire.synonymsFile);
 
 	}
     
