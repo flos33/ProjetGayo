@@ -87,7 +87,6 @@ public class RechercheDocController {
 				gestionnaire.getDocListe().add(doc);
 				i++;
 				}
-            	docTable.setItems(gestionnaire.getDocListe());
             
 			} catch (IOException | ParseException e) {
 				e.printStackTrace();
