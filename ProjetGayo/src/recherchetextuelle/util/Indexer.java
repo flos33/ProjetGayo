@@ -29,7 +29,7 @@ public class Indexer {
 	// private static EnglishAnalyzer analyzer = new
 	// EnglishAnalyzer(Version.LUCENE_40, EnglishAnalyzer.getDefaultStopSet());
 	private static CustomAnalyzer analyzer;
-	private static IndexWriter writer;  // retirer le static pour que chaque objet index ai son writer specific
+	private IndexWriter writer;  // retirer le static pour que chaque objet index ai son writer specific
 	private  ArrayList<File> queue = new ArrayList<File>();
 	private CustomSimilarity noTfSimilarity = new CustomSimilarity();
 	
@@ -52,7 +52,7 @@ public class Indexer {
 	}
 
 	
-	public static void indexDocument(Document doc) throws IOException {
+	public void indexDocument(Document doc) throws IOException {
 		writer.addDocument(doc);		
 	}
 

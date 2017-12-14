@@ -29,9 +29,9 @@ public class Gestionnaire extends Application {
        
     static Indexer indexer = null;
 	static Searcher searcher = null;
-	static String indexDir ="/Users/ccecqa/Desktop/Gayo/index";
-	static String corpusDir ="/Users/ccecqa/Desktop/Gayo/corpus";
-	static String synonymsFile = "/Users/ccecqa/Downloads/synonyms.txt";
+	static String indexDir /*="/Users/ccecqa/Desktop/Gayo/index"*/;
+	static String corpusDir /*="/Users/ccecqa/Desktop/Gayo/corpus"*/;
+	static String synonymsFile /*= "/Users/ccecqa/Downloads/synonyms.txt"*/;
 	
 
     @Override
@@ -39,7 +39,6 @@ public class Gestionnaire extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("recherchetextuelle");
         initPanneauUtilisateur();
-
         showRechercheDoc();
     }
     public void createSearcher(String indexDirectory, String synonymsFile) throws IOException, ParseException{
@@ -126,6 +125,7 @@ public class Gestionnaire extends Application {
 
 	public  void setIndexDir(String indexDir) {
 		Gestionnaire.indexDir = indexDir;
+		System.out.println(Gestionnaire.indexDir);
 		try {
 			indexer = new Indexer(indexDir);
 		} catch (IOException e) {
@@ -142,6 +142,7 @@ public class Gestionnaire extends Application {
 
 	public  void setCorpusDir(String corpusDir) {
 		Gestionnaire.corpusDir = corpusDir;
+System.out.println(Gestionnaire.corpusDir);
 	}
 
 	public  String getSynonymsFile() {
@@ -151,6 +152,8 @@ public class Gestionnaire extends Application {
 
 	public  void setSynonymsFile(String synonymsFile) {
 		Gestionnaire.synonymsFile = synonymsFile;
+		System.out.println(Gestionnaire.synonymsFile);
+
 	}
     
    
