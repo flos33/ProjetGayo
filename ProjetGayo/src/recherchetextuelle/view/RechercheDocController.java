@@ -18,14 +18,16 @@ import javafx.stage.Window;
 import javafx.scene.control.Alert.AlertType;
 import recherchetextuelle.Gestionnaire;
 import recherchetextuelle.model.Document;
+import recherchetextuelle.util.Indexer;
 import recherchetextuelle.util.Searcher;
 
 public class RechercheDocController {
 
-	// Reference à l'application principale.
+	// Reference ï¿½ l'application principale.
 	private Gestionnaire gestionnaire;
 	private Window dialogStage;
-
+	static Indexer indexer = null;
+	static Searcher searcher = null;
 	@FXML
 	private TableView<Document> docTable;
 	@FXML
@@ -80,10 +82,17 @@ public class RechercheDocController {
 	@FXML
 	private void handleLaunchIndexingBtn() {
 		String corpusDir = gestionnaire.getCorpusDir();
-
+		String indexDir = gestionnaire.getIndexDir();
+		String synonymesFile = gestionnaire.getSynonymsFile();
+		
 		try {
-			gestionnaire.getIndexer().indexFileOrDirectory(corpusDir);
+			indexer = new Indexer(indexDir, synonymesFile);
+			indexer.indexFileOrDirectory(corpusDir);
+			indexer.closeIndex();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -99,7 +108,7 @@ public class RechercheDocController {
 			for (Iterator<org.apache.lucene.document.Document> iterator = gestionnaire.getSearcher().findSusDec().iterator(); iterator.hasNext();) {
 				org.apache.lucene.document.Document d = (org.apache.lucene.document.Document) iterator.next();
 				recherchetextuelle.model.Document doc = 
-						new recherchetextuelle.model.Document(d.get("path"),String.valueOf(i));
+						new recherchetextuelle.model.Document(d.get("filename"),String.valueOf(i));
 				gestionnaire.getDocListe().add(doc);
 				i++;
 			}
