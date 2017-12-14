@@ -86,9 +86,9 @@ public class RechercheDocController {
 		String synonymesFile = gestionnaire.getSynonymsFile();
 		
 		try {
-			gestionnaire.setIndexer(new Indexer(indexDir, synonymesFile));
-			gestionnaire.getIndexer().indexFileOrDirectory(corpusDir);
-			gestionnaire.getIndexer().closeIndex();
+			indexer = new Indexer(indexDir, synonymesFile);
+			indexer.indexFileOrDirectory(corpusDir);
+			indexer.closeIndex();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
