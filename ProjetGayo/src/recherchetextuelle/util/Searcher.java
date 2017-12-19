@@ -32,10 +32,10 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 
 public class Searcher {
-	static IndexReader reader;
-	static IndexSearcher searcher;
-	static TopScoreDocCollector collector = TopScoreDocCollector.create(5);
-	static FileReader synonymFileReader;
+	public IndexReader reader;
+	public IndexSearcher searcher;
+	public TopScoreDocCollector collector = TopScoreDocCollector.create(5);
+	public FileReader synonymFileReader;
 	CustomAnalyzer analyzer;
 	private CustomSimilarity noTfSimilarity = new CustomSimilarity();
 	

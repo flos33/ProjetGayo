@@ -28,7 +28,7 @@ public class Indexer {
 
 	// private static EnglishAnalyzer analyzer = new
 	// EnglishAnalyzer(Version.LUCENE_40, EnglishAnalyzer.getDefaultStopSet());
-	private static CustomAnalyzer analyzer;
+	private CustomAnalyzer analyzer;
 	private IndexWriter writer;  // retirer le static pour que chaque objet index ai son writer specific
 	private  ArrayList<File> queue = new ArrayList<File>();
 	private CustomSimilarity noTfSimilarity = new CustomSimilarity();
@@ -112,7 +112,7 @@ public class Indexer {
 	    queue.clear();
 	  }
 	
-	public static CharArraySet getStopWords(){
+	/*public static CharArraySet getStopWords(){
 		System.out.println("Enter the path to the stop word file");
 		BufferedReader br = new BufferedReader(
 	            new InputStreamReader(System.in));
@@ -133,7 +133,7 @@ public class Indexer {
 			e.printStackTrace();
 		}
 		return new CharArraySet(wordList, true);
-	}
+	}*/
 	
 	private Document fileToDoc(FileReader fr,String filePath, String fileName)  {
 		Document doc = new Document();

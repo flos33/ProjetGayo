@@ -11,7 +11,7 @@ import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 
-public final class SynonymsAnalyzer extends Analyzer {
+public class SynonymsAnalyzer extends Analyzer {
 	  
 	  /**
 	   * Creates a new {@link WhitespaceAnalyzer}
